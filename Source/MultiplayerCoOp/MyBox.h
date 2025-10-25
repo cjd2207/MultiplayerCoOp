@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MyBox.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class MULTIPLAYERCOOP_API AMyBox : public AActor
 {
 	GENERATED_BODY()
@@ -22,5 +22,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	float ReplicatedVar;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };
