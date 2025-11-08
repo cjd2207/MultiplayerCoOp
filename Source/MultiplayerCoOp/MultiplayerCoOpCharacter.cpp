@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MultiplayerCoOp.h"
+#include "Net/UnrealNetwork.h"
 
 AMultiplayerCoOpCharacter::AMultiplayerCoOpCharacter()
 {
@@ -48,6 +49,7 @@ AMultiplayerCoOpCharacter::AMultiplayerCoOpCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	bReplicates = true;
 }
 
 void AMultiplayerCoOpCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -130,4 +132,13 @@ void AMultiplayerCoOpCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}	
+
+void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation()
+{
+	if (HasAuthority())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, TEXT("Server: ServerRPCFunction_Implementation"));
+	}
 }
+
