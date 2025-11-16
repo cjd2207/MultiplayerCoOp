@@ -95,5 +95,8 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void ServerRPCFunction();
+
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* SphereMesh;
 };
 

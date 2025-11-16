@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "MultiplayerCoOp.h"
 #include "Net/UnrealNetwork.h"
+#include "Engine/StaticMeshActor.h"
 
 AMultiplayerCoOpCharacter::AMultiplayerCoOpCharacter()
 {
@@ -136,9 +137,36 @@ void AMultiplayerCoOpCharacter::DoJumpEnd()
 
 void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation()
 {
+#if 0
 	if (HasAuthority())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, TEXT("Server: ServerRPCFunction_Implementation"));
 	}
-}
+#endif
 
+	if (!SphereMesh)
+	{
+		return;
+	}
+
+	AStaticMeshActor* StaticMeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+	if (StaticMeshActor)
+	{
+		StaticMeshActor->SetReplicates(true);
+		StaticMeshActor->SetReplicateMovement(true);
+		StaticMeshActor->SetMobility(EComponentMobility::Movable);
+		FVector SpawnLocation = GetActorLocation() + 200.0f;
+		StaticMeshActor->SetActorLocation(SpawnLocation);
+		StaticMeshActor->GetStaticMeshComponent();
+		UStaticMeshComponent* StaticMeshComponent = StaticMeshActor->GetStaticMeshComponent();
+		if (StaticMeshComponent)
+		{
+			StaticMeshComponent->SetIsReplicated(true);
+			StaticMeshComponent->SetSimulatePhysics(true);
+			if (SphereMesh)
+			{
+				StaticMeshComponent->SetStaticMesh(SphereMesh);
+			}
+		}
+	}
+}
