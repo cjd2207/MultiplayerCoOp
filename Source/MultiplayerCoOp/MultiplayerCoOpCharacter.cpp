@@ -135,7 +135,7 @@ void AMultiplayerCoOpCharacter::DoJumpEnd()
 	StopJumping();
 }	
 
-void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation()
+void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation(int MyArg)
 {
 #if 0
 	if (HasAuthority())
@@ -143,6 +143,8 @@ void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation()
 		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, TEXT("Server: ServerRPCFunction_Implementation"));
 	}
 #endif
+	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Green, 
+		FString::Printf(TEXT("MyArg: %d"), MyArg));
 
 	if (!SphereMesh)
 	{
@@ -169,4 +171,13 @@ void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation()
 			}
 		}
 	}
+}
+
+bool AMultiplayerCoOpCharacter::ServerRPCFunction_Validate(int MyArg)
+{
+	if (MyArg >= 0 && MyArg <= 100)
+	{
+		return true;
+	}
+	return false;
 }
