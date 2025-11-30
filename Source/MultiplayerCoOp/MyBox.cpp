@@ -3,6 +3,7 @@
 
 #include "MyBox.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyBox::AMyBox()
@@ -88,5 +89,11 @@ void AMyBox::MulticastRPCExplode_Implementation()
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Client: MulticastRPCExplode_Implementation"));
+	}
+
+	if (!IsRunningDedicatedServer())
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect, GetActorLocation(),
+			FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
 	}
 }
