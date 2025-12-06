@@ -12,7 +12,8 @@
 #include "InputActionValue.h"
 #include "MultiplayerCoOp.h"
 #include "Net/UnrealNetwork.h"
-#include "Engine/StaticMeshActor.h"
+#include "Engine/StaticMeshActor.h"	
+#include "Kismet/GameplayStatics.h"
 
 AMultiplayerCoOpCharacter::AMultiplayerCoOpCharacter()
 {
@@ -182,4 +183,14 @@ bool AMultiplayerCoOpCharacter::ServerRPCFunction_Validate(int MyArg)
 		return true;
 	}
 	return false;
+}
+
+void AMultiplayerCoOpCharacter::ClientRPCFunction_Implementation()
+{
+	if (ParticleEffect)
+	{
+		FVector SpawnLocation = GetActorLocation();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect,
+			SpawnLocation, FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
+	}
 }
