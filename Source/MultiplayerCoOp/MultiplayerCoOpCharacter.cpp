@@ -151,7 +151,9 @@ void AMultiplayerCoOpCharacter::ServerRPCFunction_Implementation(int MyArg)
 		return;
 	}
 
-	AStaticMeshActor* StaticMeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Owner = this;
+	AStaticMeshActor* StaticMeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(SpawnParameters);
 	if (StaticMeshActor)
 	{
 		StaticMeshActor->SetReplicates(true);
